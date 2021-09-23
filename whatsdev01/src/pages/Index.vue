@@ -70,10 +70,19 @@ export default ({
     color: #444444;
   }
 
+  width: 48%;
+
   .q-btn,
   .q-input {
     width: 300px;
   }
 }
+.image {
+  background-image: url("../assets/background.png");
+  height: 100vh;
+  width: 48%;
+
+}
+
 
 </style>
