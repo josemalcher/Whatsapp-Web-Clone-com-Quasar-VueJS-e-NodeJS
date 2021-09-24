@@ -1,20 +1,23 @@
 <template>
   <q-page class="container full-height">
-  <div></div>
-  <div class="column" v-if="1 === 3">
-
-  </div>
-    <Empty v-else />
+    <div>
+      <ComversationArea/>
+    </div>
+    <div class="column" v-if="1 === 3">
+    </div>
+    <Empty v-else/>
   </q-page>
 </template>
 
 <script>
-import Empty from 'src/components/Empty/Index'
+import Empty            from 'src/components/Empty/Index'
+import ComversationArea from 'src/components/ComversationArea/Index';
 
 export default {
   name: "RestrictArea",
-  components:{
-    Empty
+  components: {
+    Empty,
+    ComversationArea
   }
 }
 </script>
