@@ -2,7 +2,7 @@
   <div class="container-header">
     <div class="row items-center justify-between container-actions">
       <q-avatar size="40px" class="q-px-md">
-        <q-img src="https://i.pravatar.cc/40"></q-img>
+        <img src="https://i.pravatar.cc/40"/>
       </q-avatar>
       <div class="row items-center justify-center">
         <q-btn
