@@ -3,7 +3,8 @@
     <div>
       <ComversationArea/>
     </div>
-    <div class="column" v-if="1 === 3">
+    <div class="column" v-if="1 === 1">
+      <TopBar :title="'Jose Malcher Jr.'"/>
     </div>
     <Empty v-else/>
   </q-page>
@@ -12,12 +13,15 @@
 <script>
 import Empty            from 'src/components/Empty/Index'
 import ComversationArea from 'src/components/ComversationArea/Index';
+import TopBar           from 'src/components/TopBar/Index'
+
 
 export default {
   name: "RestrictArea",
   components: {
     Empty,
-    ComversationArea
+    ComversationArea,
+    TopBar
   }
 }
 </script>
