@@ -6,6 +6,7 @@
     <div class="column" v-if="1 === 1">
       <TopBar :title="'Jose Malcher Jr.'"/>
       <ChatArea/>
+      <MessageBar/>
     </div>
     <Empty v-else/>
   </q-page>
@@ -16,6 +17,7 @@ import Empty            from 'src/components/Empty/Index'
 import ComversationArea from 'src/components/ComversationArea/Index';
 import TopBar           from 'src/components/TopBar/Index'
 import ChatArea         from 'src/components/ChatArea/Index'
+import MessageBar       from 'src/components/MessageBar/Index'
 
 export default {
   name: "RestrictArea",
@@ -23,7 +25,8 @@ export default {
     Empty,
     ComversationArea,
     TopBar,
-    ChatArea
+    ChatArea,
+    MessageBar
   }
 }
 </script>
