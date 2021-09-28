@@ -1,14 +1,23 @@
 <template>
   <div class="chat-area">
     <div class="image full-width full-height">
-      <h5>Mensagens</h5>
+      <Message v-for="item in 10"
+               :key="item"
+               :text="'Nova Mensagem'"
+               :hour="'12:05'"
+               :my = "true"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import Message from "src/components/Message/Index"
 export default {
   name: "ChatArea",
+  components:{
+    Message
+  },
   data() {
     return {}
   }
