@@ -10,7 +10,10 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "axios": "^0.22.0",
     "core-js": "^3.6.5",
+    "crypto": "^1.0.1",
+    "crypto-browserify": "^3.12.0",
     "quasar": "^2.0.0",
     "src": "^1.1.2"
   },

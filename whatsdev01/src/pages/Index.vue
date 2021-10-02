@@ -15,6 +15,7 @@
         color="secondary"
         label="Acessar Chat"
         no-caps
+        @click="singIn()"
       ></q-btn>
     </div>
     <q-separator vertical></q-separator>
@@ -47,6 +48,9 @@
 </template>
 
 <script>
+import {notify} from "src/utils";
+import api      from 'src/services/api';
+import crypto   from "crypto";
 
 export default ({
   name: 'PageIndex',
@@ -55,6 +59,35 @@ export default ({
       email: '',
       name: '',
       emailSegnUp: ''
+    }
+  },
+  methods: {
+    async singIn() {
+      if (this.email === "") {
+        this.fail("Preencha o campo de email");
+      }
+      await api.get(`/user/${this.email}`).then(response => {
+        this.success("Login efetuado com sucesso", response.data.id);
+      })
+        .catch(error => {
+          notify("negative", error.response.data.message);
+        })
+    },
+    success(message, id) {
+      this.$router.push({path: "chat"})
+      notify("positive", message);
+
+      const receiver = crypto
+        .createHash("md5")
+        .update(`${id}`)
+        .digest("hex");
+
+      localStorage.setItem("receiver", receiver);
+      localStorage.setItem("myid", id);
+
+    },
+    fail(message, id) {
+      notify("negative", message);
     }
   }
 })
@@ -77,6 +110,7 @@ export default ({
     width: 300px;
   }
 }
+
 .image {
   background-image: url("../assets/background.png");
   height: 100vh;
