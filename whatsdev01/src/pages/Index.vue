@@ -42,6 +42,7 @@
         color="secondary"
         label="Cadastrar"
         no-caps
+        @click="signUp"
       ></q-btn>
     </div>
   </q-page>
@@ -61,18 +62,55 @@ export default ({
       emailSegnUp: ''
     }
   },
+  watch:{
+    email(){
+      if (this.email !== "") {
+        this.name = "";
+        this.emailSegnUp = "";
+      }
+    },
+    name(){
+      if (this.name !== "") {
+        this.email = "";
+      }
+    },
+    emailSegnUp(){
+      if (this.emailSegnUp !== "") {
+        this.email = ""
+      }
+    }
+  },
   methods: {
     async singIn() {
       if (this.email === "") {
         this.fail("Preencha o campo de email");
+        return;
       }
-      await api.get(`/user/${this.email}`).then(response => {
+      await api
+        .get(`/user/${this.email}`)
+        .then(response => {
         this.success("Login efetuado com sucesso", response.data.id);
       })
         .catch(error => {
           notify("negative", error.response.data.message);
         })
     },
+
+    async signUp(){
+      if (this.emailSegnUp === "" || this.name === "") {
+        this.fail("Preencha o campo de E-email e Nome");
+        return
+      }
+      await api
+        .post("user",{name: this.name, email: this.emailSegnUp})
+        .then(response => {
+          this.success("Cadastro efetuado com sucesso!", response.data.id)
+        })
+        .catch(error => {
+          notify("negative", error.response.data.message);
+        })
+    },
+
     success(message, id) {
       this.$router.push({path: "chat"})
       notify("positive", message);
