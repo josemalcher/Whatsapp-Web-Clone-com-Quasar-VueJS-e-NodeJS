@@ -18,7 +18,11 @@
     "src": "^1.1.2"
   },
   "devDependencies": {
-    "@quasar/app": "^3.0.0"
+    "@quasar/app": "^3.0.0",
+    "path-browserify": "^1.0.1"
+  },
+  "browser": {
+    "crypto": false
   },
   "browserslist": [
     "last 10 Chrome versions",

@@ -84,7 +84,6 @@ export default ({
 
       localStorage.setItem("receiver", receiver);
       localStorage.setItem("myid", id);
-
     },
     fail(message, id) {
       notify("negative", message);
@@ -115,8 +114,5 @@ export default ({
   background-image: url("../assets/background.png");
   height: 100vh;
   width: 48%;
-
 }
-
-
 </style>
