@@ -6,17 +6,19 @@
         rounded
         outlined
         v-model="email"
-        label="Informe seu email"
+        label="Informe o seu E-mail"
         bg-color="white"
         class="q-mb-md"
-      ></q-input>
+      >
+      </q-input>
       <q-btn
         :ripple="false"
         color="secondary"
         label="Acessar Chat"
         no-caps
-        @click="singIn()"
-      ></q-btn>
+        @click="signIn()"
+      >
+      </q-btn>
     </div>
     <q-separator vertical></q-separator>
     <div class="container q-pa-xl">
@@ -25,110 +27,110 @@
         rounded
         outlined
         v-model="name"
-        label="Informe seu Nome"
+        label="Informe o seu nome"
         bg-color="white"
         class="q-mb-md"
-      ></q-input>
+      >
+      </q-input>
       <q-input
         rounded
         outlined
-        v-model="emailSegnUp"
-        label="Informe seu Email"
+        v-model="emailSignUp"
+        label="Informe o seu E-mail"
         bg-color="white"
         class="q-mb-md"
-      ></q-input>
+      >
+      </q-input>
       <q-btn
         :ripple="false"
         color="secondary"
         label="Cadastrar"
         no-caps
-        @click="signUp"
-      ></q-btn>
+        @click="signUp()"
+      />
     </div>
   </q-page>
 </template>
 
 <script>
 import {notify} from "src/utils";
-import api      from 'src/services/api';
-import crypto   from "crypto";
+import api from "src/services/api";
+//import crypto from "crypto";
+import md5 from "md5";
 
-export default ({
-  name: 'PageIndex',
+export default {
+  name: "PageIndex",
   data() {
     return {
-      email: '',
-      name: '',
-      emailSegnUp: ''
-    }
+      email: "",
+      name: "",
+      emailSignUp: "",
+    };
   },
-  watch:{
-    email(){
+  watch: {
+    email() {
       if (this.email !== "") {
         this.name = "";
-        this.emailSegnUp = "";
+        this.emailSignUp = "";
       }
     },
-    name(){
-      if (this.name !== "") {
-        this.email = "";
-      }
+    name() {
+      if (this.name !== "") this.email = "";
     },
-    emailSegnUp(){
-      if (this.emailSegnUp !== "") {
-        this.email = ""
-      }
-    }
+    emailSignUp() {
+      if (this.name !== "") this.email = "";
+    },
   },
+
   methods: {
-    async singIn() {
+    async signIn() {
       if (this.email === "") {
-        this.fail("Preencha o campo de email");
+        this.fail("Preencha o campo de e-mail!");
         return;
       }
       await api
         .get(`/user/${this.email}`)
-        .then(response => {
-        this.success("Login efetuado com sucesso", response.data.id);
-      })
-        .catch(error => {
-          notify("negative", error.response.data.message);
+        .then((response) => {
+          console.log(response.data)
+          this.sucess("Login efetuado com sucesso!", response.data.id);
         })
+        .catch((error) => {
+          notify("negative", error.message);
+        });
     },
-
-    async signUp(){
-      if (this.emailSegnUp === "" || this.name === "") {
-        this.fail("Preencha o campo de E-email e Nome");
-        return
+    async signUp() {
+      if (this.emailSignUp === "" || this.name === "") {
+        this.fail("Preencha os campos de e-mail e nome");
+        return;
       }
       await api
-        .post("user",{name: this.name, email: this.emailSegnUp})
-        .then(response => {
-          this.success("Cadastro efetuado com sucesso!", response.data.id)
+        .post("user", {name: this.name, email: this.emailSignUp})
+        .then((response) => {
+          this.sucess("Cadastro efetuado com sucesso!", response.data.id);
         })
-        .catch(error => {
+        .catch((error) => {
           notify("negative", error.response.data.message);
-        })
+        });
     },
-
-    success(message, id) {
-      this.$router.push({path: "chat"})
+    sucess(message, id) {
+      console.log("Logou!")
       notify("positive", message);
+      this.$router.push({path: "chat"});
 
-      const receiver = crypto
-        .createHash("md5")
-        .update(`${id}`)
-        .digest("hex");
-
+      //const receiver = crypto.createHash("md5").update(`${id}`).digest("hex");
+      const receiver = md5(`${id}`)
+      console.log(id)
+      console.log(receiver)
       localStorage.setItem("receiver", receiver);
-      localStorage.setItem("myid", id);
+      localStorage.setItem("myId", id);
     },
-    fail(message, id) {
+    fail(message) {
       notify("negative", message);
-    }
-  }
-})
+    },
+  },
+};
 </script>
+
 <style lang="scss" scoped>
 .container {
   display: flex;
@@ -151,6 +153,5 @@ export default ({
 .image {
   background-image: url("../assets/background.png");
   height: 100vh;
-  width: 48%;
 }
 </style>
