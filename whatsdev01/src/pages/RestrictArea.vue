@@ -5,7 +5,8 @@
     </div>
     <div class="column" v-if="selectedItem">
       <TopBar :title="nameConversation"/>
-      <ChatArea/>
+      <ChatArea :currentUser="selectedItem"
+                :newMessages="newMessages" />
       <MessageBar/>
     </div>
     <Empty v-else/>
@@ -42,11 +43,11 @@ export default {
   },
   created() {
     const receiver = localStorage.getItem('receiver');
-    console.log(receiver)
-    socket.on(receiver, message => {
-      console.log(message)
+    //console.log(receiver)
+    socket.on(receiver, (message) => {
+      //console.log(message)
       const arr = [];
-      this.users.forEach(item => {
+      this.users.forEach((item) => {
         if (item.id === message.user_id) {
           item.newMessages = true;
         }
