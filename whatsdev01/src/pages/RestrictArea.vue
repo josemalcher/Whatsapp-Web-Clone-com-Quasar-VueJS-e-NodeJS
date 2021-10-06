@@ -1,10 +1,10 @@
 <template>
   <q-page class="container full-height">
     <div>
-      <ComversationArea/>
+      <ComversationArea :users="users" @selectedItem="setCurrentItem"/>
     </div>
-    <div class="column" v-if="1 === 1">
-      <TopBar :title="'Jose Malcher Jr.'"/>
+    <div class="column" v-if="selectedItem">
+      <TopBar :title="nameConversation"/>
       <ChatArea/>
       <MessageBar/>
     </div>
@@ -13,22 +13,24 @@
 </template>
 
 <script>
-import Empty            from 'src/components/Empty/Index'
+import Empty from 'src/components/Empty/Index'
 import ComversationArea from 'src/components/ComversationArea/Index';
-import TopBar           from 'src/components/TopBar/Index'
-import ChatArea         from 'src/components/ChatArea/Index'
-import MessageBar       from 'src/components/MessageBar/Index'
+import TopBar from 'src/components/TopBar/Index'
+import ChatArea from 'src/components/ChatArea/Index'
+import MessageBar from 'src/components/MessageBar/Index'
 
-import api              from 'src/services/api';
-import {notify}         from "src/utils";
-import {socket}         from "src/services/socket";
+import api from 'src/services/api';
+import {notify} from "src/utils";
+import {socket} from "src/services/socket";
 
 export default {
   name: "RestrictArea",
-  data(){
+  data() {
     return {
       users: [],
-      newMessages: ""
+      newMessages: "",
+      selectedItem: null,
+      nameConversation: ""
     }
   },
   components: {
@@ -52,7 +54,32 @@ export default {
       });
       this.newMessages = message.id;
       this.users = arr;
-    })
+    });
+  },
+  async mounted() {
+    await api
+      .get('users')
+      .then(response => {
+        this.users = response.data;
+      })
+      .catch(() => {
+        notify('negative', 'Falha ao listar usuários');
+      })
+  },
+  methods: {
+    async setCurrentItem({id, email}) {
+      //console.log('clicou', id, email)
+      this.selectedItem = id
+
+      await api.get(`user/${email}`)
+        .then((response) => {
+          this.nameConversation = response.data.name;
+        })
+        .catch(() => {
+          this.nameConversation = "Novo Usuário"
+        })
+
+    }
   }
 }
 </script>
