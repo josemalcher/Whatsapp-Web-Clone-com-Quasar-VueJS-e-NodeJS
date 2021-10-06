@@ -6,8 +6,9 @@
     <div class="column" v-if="selectedItem">
       <TopBar :title="nameConversation"/>
       <ChatArea :currentUser="selectedItem"
-                :newMessages="newMessages" />
-      <MessageBar/>
+                :newMessages="newMessages"/>
+      <MessageBar :currentUser="selectedItem"
+                  @reload="reloadMessages"/>
     </div>
     <Empty v-else/>
   </q-page>
@@ -31,7 +32,8 @@ export default {
       users: [],
       newMessages: "",
       selectedItem: null,
-      nameConversation: ""
+      nameConversation: "",
+      myId: localStorage.getItem('myId')
     }
   },
   components: {
@@ -61,7 +63,13 @@ export default {
     await api
       .get('users')
       .then(response => {
-        this.users = response.data;
+        const allUsers = [];
+        for (const item of response.data) {
+          if (item.id.toString() !== this.myId) {
+            allUsers.push(item);// Retira o usuário logado da lista
+          }
+        }
+        this.users = allUsers;
       })
       .catch(() => {
         notify('negative', 'Falha ao listar usuários');
@@ -80,6 +88,9 @@ export default {
           this.nameConversation = "Novo Usuário"
         })
 
+    },
+    reloadMessages({messageId}) {
+      this.newMessages = messageId;
     }
   }
 }
